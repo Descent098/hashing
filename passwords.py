@@ -58,6 +58,26 @@ def signup(name:str, username:str, email:str, age:int, password:str):
     users.append(User(name, username, email, age, password))
 
 def login(username:str, password:str) -> User:
+    """Allows a user to login
+
+    Parameters
+    ----------
+    username : str
+        The username to login with
+
+    password : str
+        The plaintext password to login with (in real world you should hash before passing to a function)
+
+    Returns
+    -------
+    User
+        The User object for the corresponding user (if login successful)
+
+    Raises
+    ------
+    ValueError
+        Raised when password is incorrect
+    """
     password = PEPPER + password + SALT
     password = hash_function(password)
     for user in users:

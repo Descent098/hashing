@@ -1,6 +1,6 @@
 from hashing import hash_function
 from dataclasses import dataclass, field
-from typing import Union, Tuple, Any, List
+from typing import Any, List
 
 @dataclass
 class Node:

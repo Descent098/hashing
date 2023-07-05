@@ -5,12 +5,24 @@ from hashtables import HashTableImproved
 
 regex = r"<script (.*)>(.*)</script>" # Pattern used to find info
 
-test_str = ("<script>Hello world</script>\n"
-	"<script integrity=\"hash_function-10863092770407275780296754544299212800001234567891111111111222222222233333333334444444444555555555566666666667777777777888888888\" src=\"file.js\"></script>\n"
-	"<script integrity=\"hash_function-10863092770407275780296754544299212800001234567891111111111222222222233333333334444444444555555555566666666667777777777888888888\">console.log('Hello World')</script>\n"
-	"<h1>Hello world</h1>")
+test_str = """<script>Hello world</script>\n
+	<script integrity=\"hash_function-10863092770407275780296754544299212800001234567891111111111222222222233333333334444444444555555555566666666667777777777888888888\" src=\"file.js\"></script>\n
+	<script integrity=\"hash_function-10863092770407275780296754544299212800001234567891111111111222222222233333333334444444444555555555566666666667777777777888888888\">console.log('Hello World')</script>\n
+	<h1>Hello world</h1>"""
 
 def get_script_tag_information(text:str) -> List[HashTableImproved]:
+    """Parses HTML input and returns details about the script tags inside
+
+    Parameters
+    ----------
+    text : str
+        The input HTML to parse
+
+    Returns
+    -------
+    List[HashTableImproved]
+        Returns a list of HashTableImproved's representing each tags information
+    """
     matches = re.finditer(regex, text, re.MULTILINE)
     results = []
     for match in matches:
@@ -22,7 +34,6 @@ def get_script_tag_information(text:str) -> List[HashTableImproved]:
         
 
         if "src" in match.group(0):
-            print('has src')
             for attribute in attributes:
                 if "src" in attribute:
                     src = attribute.split("=")[1].replace("\"","").replace("'","")
@@ -62,8 +73,12 @@ def check_tag_integrity(tag_integrity_hash:str, tag_integrity_hash_function:call
 
     inline_js : str, optional
         The inline javascript to check integrity against if it has any (overriden if file_location provided), by default ""
+    
+    Raises
+    ------
+    ValueError:
+        If the integrity does not match
     """
-    print(f"Check called with {file_location=}, {inline_js=}")
     if file_location:
         with open(file_location, "r") as src_file:
             file_integrity = tag_integrity_hash_function(src_file.read())
@@ -75,14 +90,25 @@ def check_tag_integrity(tag_integrity_hash:str, tag_integrity_hash_function:call
             raise ValueError(f"Provided inline JS does not match integrity hash:\n{inline_js}")
 
 def check_input_integrities(input_text: str):
-    tags = get_script_tag_information(input_text)
-    print(f"{tags=}")
-    for tag in tags:
-        print(f"{tag=}")
-        if tag["integrity_scheme"] and tag["integrity_hash"]:
-            if tag["src"]:
+    """Finds and verifies the integrities of all script tags in input HTML
+
+    Parameters
+    ----------
+    input_text : str
+        The HTML you want to verify
+    
+    Raises
+    ------
+    ValueError:
+        If the integrity of any tag does not match
+    """
+    tags = get_script_tag_information(input_text) # Get list of script tags and their information
+
+    for tag in tags: # Check each tag's integrity
+        if tag["integrity_scheme"] and tag["integrity_hash"]: # Has a hash and listed integrity scheme (hash function)
+            if tag["src"]: # If tag pulls from a js file
                 check_tag_integrity(tag["integrity_hash"], file_location=tag["src"])
-            else:
+            else: # If tag is inline JS
                 check_tag_integrity(tag["integrity_hash"],inline_js=tag["inner_content"])
 
 
