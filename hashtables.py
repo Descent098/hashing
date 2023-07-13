@@ -174,28 +174,42 @@ if __name__ == "__main__":
     # Test original Hash table
     ht = HashTable()
 
+    ## Add key-value pairs
     ht.insert("novelty", 10)
     ht.insert("yeotlvn", 11)
     ht.insert("voetlny", 12)
     ht.insert("eoltvyn", 13)
     ht.insert("asdfgsdfg", 10)
+
+    ## Print info about HashTable
+    print(ht)
+    print(ht.buckets)
+
+    ## Access values by key
     print(ht.find("novelty"))
     print(ht.find("yeotlvn"))
     print(ht.find("eoltvyn"))
-    # print(ht.find("Ay Lmao"))
-    print(ht.buckets)
+    
+    ## Access non-existant keys
+    # print(ht.find("Ay Lmao")) # Raises an error
 
     # Test improved hash Table
     ht2 = HashTableImproved()
 
+    ## Add key-value pairs
     ht2["novelty"]=10
     ht2["yeotlvn"]=11
     ht2["voetlny"]=12
     ht2["eoltvyn"]=13
     ht2["asdfgsdfg"]=10
-    
-    print(ht2)
-    print(ht2["novelty"])
-    print(ht2["yeotlvn"])
-    print(ht2["eoltvyn"])
-    # print(ht2["Ay Lmao"])
+
+    ## Uses __repr__() and __str__()
+    print(ht2) # HashTableImproved: {'novelty':10,'yeotlvn':11,'voetlny':12,'eoltvyn':13,'asdfgsdfg':10}
+
+    ## Access values by key
+    print(ht2["novelty"])# 10
+    print(ht2["yeotlvn"])# 11
+    print(ht2["eoltvyn"])# 13
+
+    ## Access non-existant keys
+    # print(ht2["Ay Lmao"]) # Raises an error

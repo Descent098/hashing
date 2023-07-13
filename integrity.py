@@ -31,8 +31,8 @@ def get_script_tag_information(text:str) -> List[HashTableImproved]:
         integrity_hash = ""
         integrity_scheme = ""
         inner_content = match.group(2)
-        
 
+        # Find Attributes we care about
         if "src" in match.group(0):
             for attribute in attributes:
                 if "src" in attribute:
@@ -89,6 +89,7 @@ def check_tag_integrity(tag_integrity_hash:str, tag_integrity_hash_function:call
         if not str(js_integrity) == str(tag_integrity_hash):
             raise ValueError(f"Provided inline JS does not match integrity hash:\n{inline_js}")
 
+
 def check_input_integrities(input_text: str):
     """Finds and verifies the integrities of all script tags in input HTML
 
@@ -113,6 +114,26 @@ def check_input_integrities(input_text: str):
 
 
 def generate_script_with_integrity(file_location: str="", inline_js:str ="") -> str:
+    """Takes in either a JS file or inline JS and gives you a script tag with an integrity hash as a string
+
+    Parameters
+    ----------
+    file_location : str, optional
+        If you want to use a JS file, specify it's path, by default ""
+
+    inline_js : str, optional
+        If you want to use inline js then specify the JS, by default ""
+
+    Returns
+    -------
+    str
+        A script tag with an integrity hash, and either a src or innertext of the js
+
+    Raises
+    ------
+    ValueError
+        If neither a file location or inline JS is provided
+    """
     if file_location:
         with open(file_location, "r") as src_file:
             integrity = hash_function(src_file.read())
@@ -122,8 +143,13 @@ def generate_script_with_integrity(file_location: str="", inline_js:str ="") -> 
         return f"<script integrity=\"hash_function-{integrity}\">{inline_js}</script>"
     else:
         raise ValueError("Please provide a file location, or the inline javascript")
-    
+
 if __name__ == "__main__":
+    # Testing generating a script with an integrity tag
+    ## File based
     print(generate_script_with_integrity("file.js"))
-    # print(generate_script_with_integrity(inline_js = r"console.log('Hello World')"))
+    ## Inline JS
+    print(generate_script_with_integrity(inline_js = r"console.log('Hello World')"))
+    
+    # Test the input integrities with the text string of 3 script tags
     check_input_integrities(test_str)
