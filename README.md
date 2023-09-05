@@ -1,8 +1,8 @@
 # Hashing
 
-This is a helper repository to the blog post on `https://schulichignite.com/blog/<ENTER URI>` that explains a basic hashing algorithm, and it's uses. You can find useful resources here:
+This is a helper repository to the blog post on [https://schulichignite.com/blog/verifying-quickly/](https://schulichignite.com/blog/verifying-quickly/) that explains a basic hashing algorithm, and it's uses. You can find useful resources here:
 
-- [Associated blog post (TODO)]()
+- [Associated blog post](https://schulichignite.com/blog/verifying-quickly/)
 - [Ignite Definition of hashing](https://schulichignite.com/definitions/hashing)
 
 Specifically this will walk through:
